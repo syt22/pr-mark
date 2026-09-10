@@ -89,6 +89,8 @@ python app.py --config config.json
 
 左侧可以浏览、搜索，并按 `scope` 和 `source_type` 筛选。右侧可以编辑：
 
+页面顶部可以在中文和 English 之间切换；语言偏好保存在当前浏览器中，不会写入研究数据库。
+
 - Source Type
 - Target
 - Status（数据库与导出字段名为 `project_status`）
@@ -228,6 +230,8 @@ Synchronization never overwrites an existing record or manual annotation. Removi
 ### Annotation interface
 
 The left panel supports browsing, searching, and filtering by `scope` and `source_type`. The right panel provides:
+
+The page language can be switched between Chinese and English from the top toolbar. The preference is stored in the current browser and is not written to the research database.
 
 - Source Type
 - Target

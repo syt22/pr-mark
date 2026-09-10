@@ -18,6 +18,8 @@ button, input, select, textarea { font: inherit; }
 .topbar h1 { margin: 0; font-size: 20px; }
 .topbar p { margin: 2px 0 0; color: var(--muted); }
 .topbar-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.language-picker { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
+.language-picker select { width: auto; min-width: 92px; padding: 6px 8px; }
 button, .button { display: inline-flex; align-items: center; justify-content: center; padding: 7px 12px; border: 1px solid #1f883d; border-radius: 6px; background: #1f883d; color: white; font-weight: 600; text-decoration: none; cursor: pointer; }
 button:disabled { opacity: .6; cursor: wait; }
 .button.secondary { border-color: var(--border); background: var(--panel); color: var(--text); }

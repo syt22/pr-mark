@@ -9,13 +9,19 @@
 <body>
   <header class="topbar">
     <div>
-      <h1>Language-Choice Evidence Annotation Tool</h1>
-      <p>MLCA manual annotation workspace</p>
+      <h1 data-i18n="appTitle">Language-Choice Evidence Annotation Tool</h1>
+      <p data-i18n="appSubtitle">MLCA manual annotation workspace</p>
     </div>
     <div class="topbar-actions">
-      <button id="sync-button" type="button">Sync from GoodData.md</button>
-      <a class="button secondary" href="/api/export/csv">Export CSV</a>
-      <a class="button secondary" href="/api/export/json">Export JSON</a>
+      <label class="language-picker"><span data-i18n="pageLanguage">Language</span>
+        <select id="language-select" aria-label="Page language">
+          <option value="zh-CN">中文</option>
+          <option value="en">English</option>
+        </select>
+      </label>
+      <button id="sync-button" type="button" data-i18n="syncButton">Sync from GoodData.md</button>
+      <a class="button secondary" href="/api/export/csv" data-i18n="exportCsv">Export CSV</a>
+      <a class="button secondary" href="/api/export/json" data-i18n="exportJson">Export JSON</a>
     </div>
   </header>
   <div id="notice" class="notice" hidden></div>
@@ -23,20 +29,20 @@
   <main class="workspace">
     <aside class="sidebar">
       <div class="sidebar-header">
-        <strong>Sources</strong>
+        <strong data-i18n="sources">Sources</strong>
         <span id="record-count">0</span>
       </div>
-      <input id="search" type="search" placeholder="Search URL, repository, choice…">
+      <input id="search" type="search" placeholder="Search URL, repository, choice…" data-i18n-placeholder="searchPlaceholder">
       <div class="filters">
-        <label>Scope
+        <label><span data-i18n="scope">Scope</span>
           <select id="scope-filter">
-            <option value="all">all</option>
-            {% for scope in scopes %}<option value="{{ scope }}">{{ scope }}</option>{% endfor %}
+            <option value="all" data-enum-kind="scope">all</option>
+            {% for scope in scopes %}<option value="{{ scope }}" data-enum-kind="scope">{{ scope }}</option>{% endfor %}
           </select>
         </label>
-        <label>Source type
+        <label><span data-i18n="sourceType">Source type</span>
           <select id="type-filter">
-            <option value="all">all</option>
+            <option value="all" data-i18n="all">all</option>
             {% for source_type in source_types %}<option value="{{ source_type }}">{{ source_type }}</option>{% endfor %}
           </select>
         </label>
@@ -46,8 +52,8 @@
 
     <section class="editor-panel">
       <div id="empty-state" class="empty-state">
-        <h2>No source selected</h2>
-        <p>Sync the Markdown input, then select a source from the list.</p>
+        <h2 data-i18n="noSourceTitle">No source selected</h2>
+        <p data-i18n="noSourceText">Sync the Markdown input, then select a source from the list.</p>
       </div>
       <form id="annotation-form" hidden>
         <div class="source-summary">
@@ -55,39 +61,39 @@
             <div class="summary-line"><span id="summary-type"></span><span id="summary-repository"></span><span id="summary-id"></span></div>
             <a id="source-url" href="#" target="_blank" rel="noopener noreferrer"></a>
           </div>
-          <a id="open-source" class="button" href="#" target="_blank" rel="noopener noreferrer">Open Source</a>
+          <a id="open-source" class="button" href="#" target="_blank" rel="noopener noreferrer" data-i18n="openSource">Open Source</a>
         </div>
 
         <div class="form-grid">
-          <label>Source Type
+          <label><span data-i18n="sourceType">Source Type</span>
             <select name="source_type">{% for source_type in source_types %}<option value="{{ source_type }}">{{ source_type }}</option>{% endfor %}</select>
           </label>
-          <label>Scope
-            <select name="scope">{% for scope in scopes %}<option value="{{ scope }}">{{ scope }}</option>{% endfor %}</select>
+          <label><span data-i18n="scope">Scope</span>
+            <select name="scope">{% for scope in scopes %}<option value="{{ scope }}" data-enum-kind="scope">{{ scope }}</option>{% endfor %}</select>
           </label>
         </div>
-        <label>Target <span class="hint">在给哪个 function / feature / module 选语言</span>
+        <label><span data-i18n="target">Target</span> <span class="hint" data-i18n="targetHint">在给哪个 function / feature / module 选语言</span>
           <textarea name="target" rows="3"></textarea>
         </label>
-        <label>Status <span class="hint">决策时点、已有语言、依赖、FFI、build support 等项目上下文</span>
+        <label><span data-i18n="status">Status</span> <span class="hint" data-i18n="statusHint">决策时点、已有语言、依赖、FFI、build support 等项目上下文</span>
           <textarea name="project_status" rows="6"></textarea>
         </label>
-        <label>Candidates <span class="hint">当时现实可行的候选语言</span>
+        <label><span data-i18n="candidates">Candidates</span> <span class="hint" data-i18n="candidatesHint">当时现实可行的候选语言</span>
           <textarea name="candidates" rows="3"></textarea>
         </label>
-        <label>Choice <span class="hint">最终采用的语言</span>
+        <label><span data-i18n="choice">Choice</span> <span class="hint" data-i18n="choiceHint">最终采用的语言</span>
           <input name="choice" type="text">
         </label>
-        <label>Evidence <span class="hint">支持判断的证据，可包含多条说明和 URL</span>
+        <label><span data-i18n="evidence">Evidence</span> <span class="hint" data-i18n="evidenceHint">支持判断的证据，可包含多条说明和 URL</span>
           <textarea name="evidence" rows="5"></textarea>
         </label>
-        <label>Rationale <span class="hint">没有明确证据时填写 unknown</span>
+        <label><span data-i18n="rationale">Rationale</span> <span class="hint" data-i18n="rationaleHint">没有明确证据时填写 unknown</span>
           <textarea name="rationale" rows="5"></textarea>
         </label>
-        <label>Other <span class="hint">边界情况、AI assistance、待检查链接等研究备注</span>
+        <label><span data-i18n="other">Other</span> <span class="hint" data-i18n="otherHint">边界情况、AI assistance、待检查链接等研究备注</span>
           <textarea name="other" rows="5"></textarea>
         </label>
-        <div id="save-status" class="save-status">Saved</div>
+        <div id="save-status" class="save-status" data-status="saved">Saved</div>
       </form>
     </section>
   </main>

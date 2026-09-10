@@ -66,6 +66,9 @@ class SyncTests(unittest.TestCase):
             markdown.write_text("https://example.com/docs/page", encoding="utf-8")
             app = create_app(markdown, database, root / "exports")
             client = app.test_client()
+            home = client.get("/")
+            self.assertEqual(home.status_code, 200)
+            self.assertIn(b'id="language-select"', home.data)
             self.assertEqual(client.post("/api/sync").status_code, 200)
             source = client.get("/api/sources").get_json()["items"][0]
             self.assertEqual(client.patch(f"/api/sources/{source['id']}", json={"target": "", "other": ""}).status_code, 200)
