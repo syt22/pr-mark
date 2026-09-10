@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Language-Choice Evidence Annotation Tool</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Language-Choice Evidence Annotation Tool</h1>
+      <p>MLCA manual annotation workspace</p>
+    </div>
+    <div class="topbar-actions">
+      <button id="sync-button" type="button">Sync from GoodData.md</button>
+      <a class="button secondary" href="/api/export/csv">Export CSV</a>
+      <a class="button secondary" href="/api/export/json">Export JSON</a>
+    </div>
+  </header>
+  <div id="notice" class="notice" hidden></div>
+
+  <main class="workspace">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <strong>Sources</strong>
+        <span id="record-count">0</span>
+      </div>
+      <input id="search" type="search" placeholder="Search URL, repository, choice…">
+      <div class="filters">
+        <label>Scope
+          <select id="scope-filter">
+            <option value="all">all</option>
+            {% for scope in scopes %}<option value="{{ scope }}">{{ scope }}</option>{% endfor %}
+          </select>
+        </label>
+        <label>Source type
+          <select id="type-filter">
+            <option value="all">all</option>
+            {% for source_type in source_types %}<option value="{{ source_type }}">{{ source_type }}</option>{% endfor %}
+          </select>
+        </label>
+      </div>
+      <div id="source-list" class="source-list"></div>
+    </aside>
+
+    <section class="editor-panel">
+      <div id="empty-state" class="empty-state">
+        <h2>No source selected</h2>
+        <p>Sync the Markdown input, then select a source from the list.</p>
+      </div>
+      <form id="annotation-form" hidden>
+        <div class="source-summary">
+          <div>
+            <div class="summary-line"><span id="summary-type"></span><span id="summary-repository"></span><span id="summary-id"></span></div>
+            <a id="source-url" href="#" target="_blank" rel="noopener noreferrer"></a>
+          </div>
+          <a id="open-source" class="button" href="#" target="_blank" rel="noopener noreferrer">Open Source</a>
+        </div>
+
+        <div class="form-grid">
+          <label>Source Type
+            <select name="source_type">{% for source_type in source_types %}<option value="{{ source_type }}">{{ source_type }}</option>{% endfor %}</select>
+          </label>
+          <label>Scope
+            <select name="scope">{% for scope in scopes %}<option value="{{ scope }}">{{ scope }}</option>{% endfor %}</select>
+          </label>
+        </div>
+        <label>Target <span class="hint">在给哪个 function / feature / module 选语言</span>
+          <textarea name="target" rows="3"></textarea>
+        </label>
+        <label>Status <span class="hint">决策时点、已有语言、依赖、FFI、build support 等项目上下文</span>
+          <textarea name="project_status" rows="6"></textarea>
+        </label>
+        <label>Candidates <span class="hint">当时现实可行的候选语言</span>
+          <textarea name="candidates" rows="3"></textarea>
+        </label>
+        <label>Choice <span class="hint">最终采用的语言</span>
+          <input name="choice" type="text">
+        </label>
+        <label>Evidence <span class="hint">支持判断的证据，可包含多条说明和 URL</span>
+          <textarea name="evidence" rows="5"></textarea>
+        </label>
+        <label>Rationale <span class="hint">没有明确证据时填写 unknown</span>
+          <textarea name="rationale" rows="5"></textarea>
+        </label>
+        <label>Other <span class="hint">边界情况、AI assistance、待检查链接等研究备注</span>
+          <textarea name="other" rows="5"></textarea>
+        </label>
+        <div id="save-status" class="save-status">Saved</div>
+      </form>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</body>
+</html>
