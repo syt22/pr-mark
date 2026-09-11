@@ -26,7 +26,26 @@
 
 ### 环境与安装
 
-需要 Python 3.10 或更高版本以及现代浏览器。
+需要 Python 3.10 或更高版本以及现代浏览器。推荐使用 [uv](https://docs.astral.sh/uv/) 管理项目环境和锁定依赖；项目已包含 `pyproject.toml` 和 `uv.lock`。
+
+安装 uv 后，在项目目录运行：
+
+```bash
+uv sync
+```
+
+uv 会自动创建并维护项目环境，不需要手动执行 `activate`。
+
+如果在 WSL 中使用位于 Windows `/mnt/...` 文件系统上的同一个项目目录，建议使用独立环境名和复制模式，避免与 Windows 环境冲突及 hardlink 警告：
+
+```bash
+export UV_PROJECT_ENVIRONMENT=.venv-wsl
+uv sync --link-mode=copy
+```
+
+`.venv-wsl/` 已加入 `.gitignore`，不会提交到 GitHub。
+
+不使用 uv 时，仍可采用传统 `venv + pip`。
 
 Windows PowerShell：
 
@@ -36,7 +55,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-macOS 或 Linux：
+macOS、Linux 或 WSL：
 
 ```bash
 python3 -m venv .venv
@@ -49,30 +68,39 @@ pip install -r requirements.txt
 默认输入文件为项目上一级目录中的 `GoodData.md`：
 
 ```bash
-python app.py
+uv run app.py
 ```
 
 然后访问 <http://127.0.0.1:5000>。程序启动时会自动执行一次非破坏性同步。
 
+WSL 与 Windows 共用项目目录时：
+
+```bash
+export UV_PROJECT_ENVIRONMENT=.venv-wsl
+uv run --link-mode=copy app.py
+```
+
 指定其他 Markdown 文件：
 
 ```bash
-python app.py --input ../GoodData.md
+uv run app.py --input ../GoodData.md
 ```
 
 指定监听地址或端口：
 
 ```bash
-python app.py --input ../GoodData.md --host 127.0.0.1 --port 5000
+uv run app.py --input ../GoodData.md --host 127.0.0.1 --port 5000
 ```
 
 也可以把 `config.example.json` 复制为被 Git 忽略的 `config.json`，修改后运行：
 
 ```bash
-python app.py --config config.json
+uv run app.py --config config.json
 ```
 
 命令行中的 `--input`、`--host` 和 `--port` 优先于配置文件中的对应值。
+
+如果使用传统虚拟环境，将以上命令中的 `uv run app.py` 替换为 `python app.py`。
 
 ### URL 同步
 
@@ -125,7 +153,14 @@ CSV 使用带 BOM 的 UTF-8，并正确转义多行字段。数据库、实际�
 ### 测试
 
 ```bash
-python -m unittest discover -s tests -v
+uv run python -m unittest discover -s tests -v
+```
+
+WSL 与 Windows 共用项目目录时，可运行：
+
+```bash
+export UV_PROJECT_ENVIRONMENT=.venv-wsl
+uv run --link-mode=copy python -m unittest discover -s tests -v
 ```
 
 测试覆盖 URL 提取、Markdown 链接、canonical URL 去重、GitHub 类型和 ID 识别、非 GitHub Blog 保留、同步不覆盖标注、空字段以及 CSV/JSON 导出。
@@ -168,7 +203,26 @@ The tool does not call the GitHub API, scrape source pages, invoke an LLM, or de
 
 ### Requirements and installation
 
-Python 3.10 or newer and a modern browser are required.
+Python 3.10 or newer and a modern browser are required. [uv](https://docs.astral.sh/uv/) is recommended for environment and locked dependency management; the project includes both `pyproject.toml` and `uv.lock`.
+
+After installing uv, run this from the project directory:
+
+```bash
+uv sync
+```
+
+uv creates and maintains the project environment automatically, so manual activation is unnecessary.
+
+When using the same project directory from WSL on a Windows `/mnt/...` filesystem, use a separate environment name and copy mode to avoid conflicts with a Windows environment and hardlink warnings:
+
+```bash
+export UV_PROJECT_ENVIRONMENT=.venv-wsl
+uv sync --link-mode=copy
+```
+
+`.venv-wsl/` is excluded by `.gitignore` and will not be committed to GitHub.
+
+Without uv, the traditional `venv + pip` workflow remains supported.
 
 Windows PowerShell:
 
@@ -178,7 +232,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-macOS or Linux:
+macOS, Linux, or WSL:
 
 ```bash
 python3 -m venv .venv
@@ -191,30 +245,39 @@ pip install -r requirements.txt
 The default input is `GoodData.md` in the project’s parent directory:
 
 ```bash
-python app.py
+uv run app.py
 ```
 
 Then open <http://127.0.0.1:5000>. The application performs a non-destructive sync at startup.
 
+When WSL and Windows share the project directory:
+
+```bash
+export UV_PROJECT_ENVIRONMENT=.venv-wsl
+uv run --link-mode=copy app.py
+```
+
 Select a different Markdown file:
 
 ```bash
-python app.py --input ../GoodData.md
+uv run app.py --input ../GoodData.md
 ```
 
 Choose a host or port:
 
 ```bash
-python app.py --input ../GoodData.md --host 127.0.0.1 --port 5000
+uv run app.py --input ../GoodData.md --host 127.0.0.1 --port 5000
 ```
 
 Alternatively, copy `config.example.json` to the Git-ignored `config.json`, edit it, and run:
 
 ```bash
-python app.py --config config.json
+uv run app.py --config config.json
 ```
 
 Command-line `--input`, `--host`, and `--port` values take precedence over corresponding configuration values.
+
+When using a traditional activated virtual environment, replace `uv run app.py` in these commands with `python app.py`.
 
 ### URL synchronization
 
@@ -267,7 +330,14 @@ The real research database is not backed up automatically; keep a separate backu
 ### Tests
 
 ```bash
-python -m unittest discover -s tests -v
+uv run python -m unittest discover -s tests -v
+```
+
+When WSL and Windows share the project directory, run:
+
+```bash
+export UV_PROJECT_ENVIRONMENT=.venv-wsl
+uv run --link-mode=copy python -m unittest discover -s tests -v
 ```
 
 Tests cover URL extraction, Markdown links, canonical URL deduplication, GitHub classifications and identifiers, retention of non-GitHub blog URLs, synchronization without annotation overwrite, empty fields, and CSV/JSON exports.
